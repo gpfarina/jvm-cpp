@@ -5,6 +5,7 @@ repos:
     -   id: clang-format
         args:
         - --style=Google
+        - -i
     -   id: clang-tidy
         args:
         - -fix-errors 
