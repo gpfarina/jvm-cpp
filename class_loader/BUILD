@@ -4,5 +4,6 @@ cc_library(
         "ClassLoader.cpp",
         "ClassLoader.hpp"
     ],
-    visibility = ["//visibility:public"],
+    deps=["//class"],
+    visibility = ["//visibility:public"]
 )

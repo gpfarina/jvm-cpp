@@ -1,8 +1,12 @@
 #include "ClassLoader.hpp"
 
 #include <cstdint>
+#include <format>
 #include <fstream>
 #include <iostream>
+#include <numeric>
+
+#include "class/Class.hpp"
 using namespace std;
 
 ClassLoader::ClassLoader(const string fileName) {
@@ -14,25 +18,32 @@ bool ClassLoader::isLittleEndian() {
   uint8_t* ptr = reinterpret_cast<uint8_t*>(&num);
   return ptr[0] == 0x1;
 }
-int ClassLoader::parse() {
+
+Class ClassLoader::parse() {
+  Class _class;
   ifstream file;
   uint32_t magicNumber;
+  uint16_t minorVersion;
+  uint16_t majorVersion;
 
   file.open(fileName, std::ios::binary);
 
   if (!file) {
-    cerr << "Error opening file: " << fileName << endl;
-    return -1;
+    throw std::invalid_argument(
+        std::format("Error opening file: {}", fileName));
   }
   file.read(reinterpret_cast<char*>(&magicNumber), sizeof(magicNumber));
-
-  if ((isLittleEndian() &&
-       magicNumber != ClassLoader::MAGIC_NUMBER_LITTLE_ENDIAN) ||
-      (!isLittleEndian() &&
-       magicNumber != ClassLoader::MAGIC_NUMBER_BIG_ENDIAN)) {
-    cerr << "Invalid magic number. This is not a valid .class file.: "
-         << std::hex << magicNumber << endl;
-    return -2;
+  if (magicNumber != ClassLoader::MAGIC_NUMBER_LITTLE_ENDIAN) {
+    throw std::invalid_argument(std::format(
+        "Invalid magic number: {:x}. This is not a valid .class file",
+        magicNumber));
   }
-  return 0;
+  _class.setMagicNumber(isLittleEndian() ? byteswap(magicNumber) : magicNumber);
+  file.read(reinterpret_cast<char*>(&minorVersion), sizeof(minorVersion));
+  _class.setMinorVersion(isLittleEndian() ? byteswap(minorVersion)
+                                          : minorVersion);
+  file.read(reinterpret_cast<char*>(&majorVersion), sizeof(majorVersion));
+  _class.setMajorVersion(isLittleEndian() ? byteswap(majorVersion)
+                                          : majorVersion);
+  return _class;
 }
