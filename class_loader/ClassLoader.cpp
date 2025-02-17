@@ -45,5 +45,11 @@ Class ClassLoader::parse() {
   file.read(reinterpret_cast<char*>(&majorVersion), sizeof(majorVersion));
   _class.setMajorVersion(isLittleEndian() ? byteswap(majorVersion)
                                           : majorVersion);
+
+  if (_class.getMajorVersion() >= 56 && _class.getMinorVersion() != 0 &&
+      _class.getMinorVersion() != 65535) {
+    throw std::invalid_argument(
+        "A major version >= 56 must have a minor version of 0 or 65535");
+  }
   return _class;
 }
