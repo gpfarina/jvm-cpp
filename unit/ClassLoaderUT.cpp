@@ -15,4 +15,5 @@ TEST(ClassLoaderUnitTest /*unused*/, Passes /*unused*/) {
   ClassLoader cl = ClassLoader(path);
   Class _class = cl.parse();
   EXPECT_EQ(_class.getMajorVersion(), 65);
+  EXPECT_EQ(_class.getConstantPoolCount(), 15);
 }

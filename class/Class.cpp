@@ -12,9 +12,13 @@ void Class::setMajorVersion(uint16_t majorVersion) {
   this->majorVersion = majorVersion;
 }
 
-void Class::setConstantPoolCount() {}
+void Class::setConstantPoolCount(uint16_t constantPoolCount) {
+  this->constantPoolCount = constantPoolCount;
+}
 
-void Class::setConstantPool() {}
+// void Class::setConstantPool(cpInfo *cpInfoTable) {
+//   this->constantPool=cpInfoTable;
+// }
 
 void Class::setAccessFlags() {}
 
@@ -36,7 +40,9 @@ uint16_t Class::getMinorVersion() { return this->minorVersion; }
 
 uint16_t Class::getMajorVersion() { return this->majorVersion; }
 
-uint16_t Class::getConstantPoolCount() { return 0; }
+uint16_t Class::getConstantPoolCount() { return this->constantPoolCount; }
+
+// cpInfo* Class::getConstantPool() { return this->constantPool; }
 
 uint16_t Class::getAccessFlags() { return 0; }
 

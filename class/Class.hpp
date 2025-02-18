@@ -3,13 +3,14 @@
 #include <vector>
 
 #pragma once
+
 class Class {
  public:
   void setMagicNumber(uint32_t magicNumber);
   void setMinorVersion(uint16_t minorVersion);
   void setMajorVersion(uint16_t majorVersion);
-  void setConstantPoolCount();
-  void setConstantPool();
+  void setConstantPoolCount(uint16_t constantPoolCount);
+  // void setConstantPool(cpInfo *cpInfoTable);
   void setAccessFlags();
   void setThisClass();
   void setSuperClass();
@@ -22,7 +23,7 @@ class Class {
   uint16_t getMinorVersion();
   uint16_t getMajorVersion();
   uint16_t getConstantPoolCount();
-  std::vector<std::string> getConstantPool();
+  // cpInfo* getConstantPool();
   uint16_t getAccessFlags();
   uint16_t getThisClass();
   uint16_t getSuperClass();
@@ -36,7 +37,7 @@ class Class {
   uint16_t minorVersion;
   uint16_t majorVersion;
   uint16_t constantPoolCount;
-  std::vector<std::string> constantPool;
+  // cpInfo *constantPool;
   uint16_t accessFlags;
   uint16_t thisClass;
   uint16_t superClass;
