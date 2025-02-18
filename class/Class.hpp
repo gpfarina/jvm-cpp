@@ -4,13 +4,36 @@
 
 #pragma once
 
+struct CONSTANT_Methodref_info {
+  uint8_t tag;
+  uint16_t class_index;
+  uint16_t name_and_type_index;
+};
+
+struct CONSTANT_Class_info {
+  uint8_t tag;
+  uint16_t name_index;
+};
+
+struct CONSTANT_Utf8_info {
+  uint8_t tag;
+  uint16_t length;
+  uint8_t* bytes;
+};
+union CONSTANT_pool_entry {
+  CONSTANT_Class_info constant_class;
+  CONSTANT_Methodref_info constant_method;
+  CONSTANT_Utf8_info constant_utf8_info;
+};
+
+typedef CONSTANT_pool_entry* ConstantPoolTable;
 class Class {
  public:
   void setMagicNumber(uint32_t magicNumber);
   void setMinorVersion(uint16_t minorVersion);
   void setMajorVersion(uint16_t majorVersion);
   void setConstantPoolCount(uint16_t constantPoolCount);
-  // void setConstantPool(cpInfo *cpInfoTable);
+  void setConstantPool(ConstantPoolTable cpInfoTable);
   void setAccessFlags();
   void setThisClass();
   void setSuperClass();
@@ -23,7 +46,7 @@ class Class {
   uint16_t getMinorVersion();
   uint16_t getMajorVersion();
   uint16_t getConstantPoolCount();
-  // cpInfo* getConstantPool();
+  ConstantPoolTable getConstantPool();
   uint16_t getAccessFlags();
   uint16_t getThisClass();
   uint16_t getSuperClass();
@@ -37,7 +60,7 @@ class Class {
   uint16_t minorVersion;
   uint16_t majorVersion;
   uint16_t constantPoolCount;
-  // cpInfo *constantPool;
+  ConstantPoolTable constantPool;
   uint16_t accessFlags;
   uint16_t thisClass;
   uint16_t superClass;

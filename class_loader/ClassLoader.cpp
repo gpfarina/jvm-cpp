@@ -1,5 +1,6 @@
 #include "ClassLoader.hpp"
 
+#include <cassert>
 #include <cstdint>
 #include <cstring>
 #include <format>
@@ -80,18 +81,35 @@ Class ClassLoader::parse() {
   _class.setMajorVersion(majorVersion);
   constant_pool_count = readBigEndian<uint16_t>(file);
   _class.setConstantPoolCount(constant_pool_count);
+
+  ConstantPoolTable cpTable =
+      new CONSTANT_pool_entry[_class.getConstantPoolCount() - 1];
+
   for (unsigned short int idx = 0; idx < _class.getConstantPoolCount() - 1;
        ++idx) {
     file.read(reinterpret_cast<char*>(&tag),
               sizeof(tag));  // single byte no need for endianness conversion
     switch (tag) {
+      case 7:
+        cpTable[idx].constant_class.tag = tag;
+        cpTable[idx].constant_class.name_index = readBigEndian<uint16_t>(file);
+        assert(0 <= cpTable[idx].constant_class.name_index &&
+               cpTable[idx].constant_class.name_index <=
+                   _class.getConstantPoolCount() - 1);
+        // TODO:
+        // assert(cpTable[cpTable[idx].constant_class.name_index].constant_utf8_info.tag==1);
+        // but after the whoel thing has been read
+        break;
       case 10:
-        uint16_t class_index = readBigEndian<uint16_t>(file);
-        uint16_t name_and_type_index = readBigEndian<uint16_t>(file);
+        cpTable[idx].constant_method.tag = tag;
+        cpTable[idx].constant_method.class_index =
+            readBigEndian<uint16_t>(file);
+        cpTable[idx].constant_method.name_and_type_index =
+            readBigEndian<uint16_t>(file);
         break;
     }
   }
 
-  // _class.setConstantPool(cpInfoTable);
+  _class.setConstantPool(cpTable);
   return _class;
 }

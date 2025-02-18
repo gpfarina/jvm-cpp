@@ -16,9 +16,9 @@ void Class::setConstantPoolCount(uint16_t constantPoolCount) {
   this->constantPoolCount = constantPoolCount;
 }
 
-// void Class::setConstantPool(cpInfo *cpInfoTable) {
-//   this->constantPool=cpInfoTable;
-// }
+void Class::setConstantPool(ConstantPoolTable cpInfoTable) {
+  this->constantPool = cpInfoTable;
+}
 
 void Class::setAccessFlags() {}
 
