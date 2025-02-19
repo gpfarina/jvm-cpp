@@ -1,5 +1,25 @@
 #include "Class.hpp"
 
+#include <cassert>
+
+Class::Class(uint32_t magicNumber, uint16_t minorVersion, uint16_t majorVersion,
+             uint16_t constantPoolCount, ConstantPoolTable constantPool,
+             uint16_t accessFlags, uint16_t thisClass, uint16_t superClass,
+             uint16_t interfacesCount, std::vector<uint16_t> interfaces,
+             uint16_t fieldsCount, uint16_t methodsCount) {
+  this->setMagicNumber(magicNumber);
+  this->setMinorVersion(minorVersion);
+  this->setMajorVersion(majorVersion);
+  this->setConstantPoolCount(constantPoolCount);
+
+  checkInvariants();
+}
+
+void Class::checkInvariants() {
+  assert(this->getMagicNumber() == MAGIC_NUMBER);
+  assert(!(majorVersion >= 56 && minorVersion != 0 && minorVersion != 65535));
+}
+
 void Class::setMagicNumber(uint32_t magicNumber) {
   this->magicNumber = magicNumber;
 }

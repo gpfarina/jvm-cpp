@@ -49,7 +49,6 @@ ClassLoader::ClassLoader(const string fileName) {
 }
 
 Class ClassLoader::parse() {
-  Class _class;
   ifstream file;
   uint32_t magicNumber;
   uint16_t minorVersion;
@@ -64,52 +63,32 @@ Class ClassLoader::parse() {
         std::format("Error opening file: {}", fileName));
   }
   magicNumber = readBigEndian<uint32_t>(file);
-  if (magicNumber != ClassLoader::MAGIC_NUMBER) {
-    throw std::invalid_argument(std::format(
-        "Invalid magic number: {:x}. This is not a valid .class file",
-        magicNumber));
-  }
-  _class.setMagicNumber(magicNumber);
   minorVersion = readBigEndian<uint16_t>(file);
   majorVersion = readBigEndian<uint16_t>(file);
-
-  if (majorVersion >= 56 && minorVersion != 0 && minorVersion != 65535) {
-    throw std::invalid_argument(
-        "A major version >= 56 must have a minor version of 0 or 65535");
-  }
-  _class.setMinorVersion(minorVersion);
-  _class.setMajorVersion(majorVersion);
   constant_pool_count = readBigEndian<uint16_t>(file);
-  _class.setConstantPoolCount(constant_pool_count);
 
-  ConstantPoolTable cpTable =
-      new CONSTANT_pool_entry[_class.getConstantPoolCount() - 1];
+  ConstantPoolTable cpTable = new CONSTANT_pool_entry[constant_pool_count - 1];
 
-  for (unsigned short int idx = 0; idx < _class.getConstantPoolCount() - 1;
-       ++idx) {
-    file.read(reinterpret_cast<char*>(&tag),
-              sizeof(tag));  // single byte no need for endianness conversion
+  for (unsigned short int idx = 0; idx < constant_pool_count - 1; ++idx) {
+    file.read(reinterpret_cast<char*>(&tag), sizeof(tag));
     switch (tag) {
       case 7:
         cpTable[idx].constant_class.tag = tag;
         cpTable[idx].constant_class.name_index = readBigEndian<uint16_t>(file);
-        assert(0 <= cpTable[idx].constant_class.name_index &&
-               cpTable[idx].constant_class.name_index <=
-                   _class.getConstantPoolCount() - 1);
-        // TODO:
-        // assert(cpTable[cpTable[idx].constant_class.name_index].constant_utf8_info.tag==1);
-        // but after the whoel thing has been read
         break;
+      case 9:
       case 10:
-        cpTable[idx].constant_method.tag = tag;
-        cpTable[idx].constant_method.class_index =
+      case 11:
+        cpTable[idx].constant_field_method_interface_method.tag = tag;
+        cpTable[idx].constant_field_method_interface_method.class_index =
             readBigEndian<uint16_t>(file);
-        cpTable[idx].constant_method.name_and_type_index =
+        cpTable[idx]
+            .constant_field_method_interface_method.name_and_type_index =
             readBigEndian<uint16_t>(file);
         break;
     }
   }
-
-  _class.setConstantPool(cpTable);
-  return _class;
+  std::vector<uint16_t> vec(1, 0);
+  return Class(magicNumber, minorVersion, majorVersion, constant_pool_count,
+               cpTable, 0, 0, 0, 0, vec, 0, 0);
 }
