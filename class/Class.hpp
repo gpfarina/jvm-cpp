@@ -27,13 +27,13 @@ union CONSTANT_pool_entry {
 };
 
 typedef CONSTANT_pool_entry* ConstantPoolTable;
-class Class {
+class ClassFile {
  public:
-  Class(uint32_t magicNumber, uint16_t minorVersion, uint16_t majorVersion,
-        uint16_t constantPoolCount, ConstantPoolTable constantPool,
-        uint16_t accessFlags, uint16_t thisClass, uint16_t superClass,
-        uint16_t interfacesCount, std::vector<uint16_t> interfaces,
-        uint16_t fieldsCount, uint16_t methodsCount);
+  ClassFile(uint32_t magicNumber, uint16_t minorVersion, uint16_t majorVersion,
+            uint16_t constantPoolCount, ConstantPoolTable constantPool,
+            uint16_t accessFlags, uint16_t thisClass, uint16_t superClass,
+            uint16_t interfacesCount, std::vector<uint16_t> interfaces,
+            uint16_t fieldsCount, uint16_t methodsCount);
   void setMagicNumber(uint32_t magicNumber);
   void setMinorVersion(uint16_t minorVersion);
   void setMajorVersion(uint16_t majorVersion);

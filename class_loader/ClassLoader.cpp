@@ -48,7 +48,7 @@ ClassLoader::ClassLoader(const string fileName) {
   ClassLoader::fileName = fileName;
 }
 
-Class ClassLoader::parse() {
+ClassFile ClassLoader::parse() {
   ifstream file;
   uint32_t magicNumber;
   uint16_t minorVersion;
@@ -89,6 +89,6 @@ Class ClassLoader::parse() {
     }
   }
   std::vector<uint16_t> vec(1, 0);
-  return Class(magicNumber, minorVersion, majorVersion, constant_pool_count,
-               cpTable, 0, 0, 0, 0, vec, 0, 0);
+  return ClassFile(magicNumber, minorVersion, majorVersion, constant_pool_count,
+                   cpTable, 0, 0, 0, 0, vec, 0, 0);
 }

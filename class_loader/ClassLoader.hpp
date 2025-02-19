@@ -7,7 +7,7 @@
 class ClassLoader {
  public:
   ClassLoader(const std::string fileName);
-  Class parse();
+  ClassFile parse();
 
  private:
   std::string fileName;
