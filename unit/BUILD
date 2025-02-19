@@ -1,9 +1,9 @@
 cc_test(
-    name = "class_loader_test",
-    srcs = ["ClassLoaderUT.cpp"],
+    name = "classfile_loader_test",
+    srcs = ["ClassFileLoaderUT.cpp"],
     deps = [
-        "//class_loader",
-        "//class",
+        "//classfile_loader",
+        "//classfile",
         "@gtest//:gtest_main",
         "@bazel_tools//tools/cpp/runfiles"
     ],

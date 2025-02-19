@@ -1,8 +1,8 @@
 cc_library(
-    name = "class",
+    name = "classfile",
     srcs = [
-        "Class.cpp",
-        "Class.hpp"
+        "ClassFile.cpp",
+        "ClassFile.hpp"
     ],
     visibility = ["//visibility:public"],
 )

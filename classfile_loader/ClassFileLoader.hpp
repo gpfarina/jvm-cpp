@@ -1,12 +1,12 @@
 #include <cstdint>
 #include <string>
 
-#include "class/Class.hpp"
+#include "classfile/ClassFile.hpp"
 
 #pragma once
-class ClassLoader {
+class ClassFileLoader {
  public:
-  ClassLoader(const std::string fileName);
+  ClassFileLoader(const std::string fileName);
   ClassFile parse();
 
  private:

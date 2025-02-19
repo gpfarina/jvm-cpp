@@ -1,4 +1,4 @@
-#include "Class.hpp"
+#include "ClassFile.hpp"
 
 #include <cassert>
 

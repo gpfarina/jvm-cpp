@@ -1,4 +1,4 @@
-#include "ClassLoader.hpp"
+#include "ClassFileLoader.hpp"
 
 #include <cassert>
 #include <cstdint>
@@ -8,7 +8,7 @@
 #include <iostream>
 #include <numeric>
 
-#include "class/Class.hpp"
+#include "classfile/ClassFile.hpp"
 using namespace std;
 
 bool isLittleEndian() {
@@ -44,11 +44,11 @@ T readBigEndian(std::ifstream& file) {
   return value;
 }
 
-ClassLoader::ClassLoader(const string fileName) {
-  ClassLoader::fileName = fileName;
+ClassFileLoader::ClassFileLoader(const string fileName) {
+  ClassFileLoader::fileName = fileName;
 }
 
-ClassFile ClassLoader::parse() {
+ClassFile ClassFileLoader::parse() {
   ifstream file;
   uint32_t magicNumber;
   uint16_t minorVersion;
