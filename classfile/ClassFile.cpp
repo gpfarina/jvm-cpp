@@ -41,19 +41,33 @@ void ClassFile::setConstantPool(ConstantPoolTable cpInfoTable) {
   this->constantPool = cpInfoTable;
 }
 
-void ClassFile::setAccessFlags() {}
+void ClassFile::setAccessFlags(uint16_t accessFlags) {
+  this->accessFlags = accessFlags;
+}
 
-void ClassFile::setThisClass() {}
+void ClassFile::setThisClass(uint16_t thisClass) {
+  this->thisClass = thisClass;
+}
 
-void ClassFile::setSuperClass() {}
+void ClassFile::setSuperClass(uint16_t superClass) {
+  this->superClass = superClass;
+}
 
-void ClassFile::setInterfacesCount() {}
+void ClassFile::setInterfacesCount(uint16_t interfacesCount) {
+  this->interfacesCount = interfacesCount;
+}
 
-void ClassFile::setInterfaces() {}
+void ClassFile::setInterfaces(std::vector<uint16_t> *interfaces) {
+  this->interfaces = *interfaces;
+}
 
-void ClassFile::setFieldsCount() {}
+void ClassFile::setFieldsCount(uint16_t fieldsCount) {
+  this->fieldsCount = fieldsCount;
+}
 
-void ClassFile::setMethodsCount() {}
+void ClassFile::setMethodsCount(uint16_t methodsCount) {
+  this->methodsCount = methodsCount;
+}
 
 uint32_t ClassFile::getMagicNumber() { return this->magicNumber; }
 
@@ -63,20 +77,18 @@ uint16_t ClassFile::getMajorVersion() { return this->majorVersion; }
 
 uint16_t ClassFile::getConstantPoolCount() { return this->constantPoolCount; }
 
-// cpInfo* Class::getConstantPool() { return this->constantPool; }
+ConstantPoolTable ClassFile::getConstantPool() { return this->constantPool; }
 
-uint16_t ClassFile::getAccessFlags() { return 0; }
+uint16_t ClassFile::getAccessFlags() { return this->accessFlags; }
 
-uint16_t ClassFile::getThisClass() { return 0; }
+uint16_t ClassFile::getThisClass() { return this->thisClass; }
 
-uint16_t ClassFile::getSuperClass() { return 0; }
+uint16_t ClassFile::getSuperClass() { return this->superClass; }
 
-uint16_t ClassFile::getInterfacesCount() { return 0; }
+uint16_t ClassFile::getInterfacesCount() { return this->interfacesCount; }
 
-std::vector<uint16_t> ClassFile::getInterfaces() {
-  return std::vector<uint16_t>();
-}
+std::vector<uint16_t> ClassFile::getInterfaces() { return this->interfaces; }
 
-u_int16_t ClassFile::getFieldsCount() { return u_int16_t(); }
+u_int16_t ClassFile::getFieldsCount() { return this->fieldsCount; }
 
-u_int16_t ClassFile::getMethodsCount() { return u_int16_t(); }
+u_int16_t ClassFile::getMethodsCount() { return this->methodsCount; }

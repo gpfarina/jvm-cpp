@@ -39,13 +39,13 @@ class ClassFile {
   void setMajorVersion(uint16_t majorVersion);
   void setConstantPoolCount(uint16_t constantPoolCount);
   void setConstantPool(ConstantPoolTable cpInfoTable);
-  void setAccessFlags();
-  void setThisClass();
-  void setSuperClass();
-  void setInterfacesCount();
-  void setInterfaces();
-  void setFieldsCount();
-  void setMethodsCount();
+  void setAccessFlags(uint16_t accessFlags);
+  void setThisClass(uint16_t thisClass);
+  void setSuperClass(uint16_t superClass);
+  void setInterfacesCount(uint16_t interfacesCount);
+  void setInterfaces(std::vector<uint16_t>* interfaces);
+  void setFieldsCount(uint16_t fieldsCount);
+  void setMethodsCount(uint16_t methodsCount);
 
   uint32_t getMagicNumber();
   uint16_t getMinorVersion();
