@@ -15,6 +15,39 @@ struct CONSTANT_Class_info {
   uint16_t name_index;
 };
 
+struct CONSTANT_String_info {
+  uint8_t tag;
+  uint16_t string_index;
+};
+
+struct CONSTANT_Integer_info {
+  uint8_t tag;
+  uint32_t bytes;
+};
+
+struct CONSTANT_Float_info {
+  uint8_t tag;
+  uint32_t bytes;
+};
+
+struct CONSTANT_Long_info {
+  uint8_t tag;
+  uint32_t high_bytes;
+  uint32_t low_bytes;
+};
+
+struct CONSTANT_Double_info {
+  uint8_t tag;
+  uint32_t high_bytes;
+  uint32_t low_bytes;
+};
+
+struct CONSTANT_NameAndType_info {
+  uint8_t tag;
+  uint16_t name_index;
+  uint16_t descriptor_index;
+};
+
 struct CONSTANT_Utf8_info {
   uint8_t tag;
   uint16_t length;
@@ -23,7 +56,13 @@ struct CONSTANT_Utf8_info {
 union CONSTANT_pool_entry {
   CONSTANT_Class_info constant_class;
   CONSTANT_FieldMethodIMethodref_info constant_field_method_interface_method;
-  CONSTANT_Utf8_info constant_utf8_info;
+  CONSTANT_String_info constant_string;
+  CONSTANT_Integer_info constant_integer;
+  CONSTANT_Float_info constant_float;
+  CONSTANT_Long_info constant_long;
+  CONSTANT_Double_info constant_double;
+  CONSTANT_NameAndType_info constant_name_and_type;
+  CONSTANT_Utf8_info constant_utf8;
 };
 
 typedef CONSTANT_pool_entry* ConstantPoolTable;

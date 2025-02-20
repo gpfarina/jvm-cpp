@@ -3,6 +3,7 @@
 #include "classfile/ClassFile.hpp"
 #include "classfile_loader/ClassFileLoader.hpp"
 #include "tools/cpp/runfiles/runfiles.h"
+
 using bazel::tools::cpp::runfiles::Runfiles;
 
 TEST(ClassFileLoaderUnitTest /*unused*/, Passes /*unused*/) {
