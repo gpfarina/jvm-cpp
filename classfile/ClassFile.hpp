@@ -53,6 +53,18 @@ struct CONSTANT_Utf8_info {
   uint16_t length;
   uint8_t* bytes;
 };
+
+struct CONSTANT_MethodHandle_info {
+  uint8_t tag;
+  uint8_t reference_kind;
+  uint16_t reference_index;
+};
+
+struct CONSTANT_MethodType_info {
+  uint8_t tag;
+  uint16_t descriptor_index;
+};
+
 union CONSTANT_pool_entry {
   CONSTANT_Class_info constant_class;
   CONSTANT_FieldMethodIMethodref_info constant_field_method_interface_method;
@@ -63,6 +75,8 @@ union CONSTANT_pool_entry {
   CONSTANT_Double_info constant_double;
   CONSTANT_NameAndType_info constant_name_and_type;
   CONSTANT_Utf8_info constant_utf8;
+  CONSTANT_MethodHandle_info constant_method_handle;
+  CONSTANT_MethodType_info constant_method_type;
 };
 
 typedef CONSTANT_pool_entry* ConstantPoolTable;

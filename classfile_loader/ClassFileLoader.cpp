@@ -44,31 +44,10 @@ T readBigEndian(std::ifstream& file) {
   return value;
 }
 
-ClassFileLoader::ClassFileLoader(const string fileName) {
-  ClassFileLoader::fileName = fileName;
-}
-
-ClassFile ClassFileLoader::parse() {
-  ifstream file;
-  uint32_t magicNumber;
-  uint16_t minorVersion;
-  uint16_t majorVersion;
-  uint16_t constant_pool_count;
-  uint8_t tag;
-  file.open(fileName, std::ios::binary);
-
-  if (!file) {
-    throw std::invalid_argument(
-        std::format("Error opening file: {}", fileName));
-  }
-
-  magicNumber = readBigEndian<uint32_t>(file);
-  minorVersion = readBigEndian<uint16_t>(file);
-  majorVersion = readBigEndian<uint16_t>(file);
-  constant_pool_count = readBigEndian<uint16_t>(file);
-
+ConstantPoolTable parseConstantPoolTable(uint16_t constant_pool_count,
+                                         std::ifstream& file) {
   ConstantPoolTable cpTable = new CONSTANT_pool_entry[constant_pool_count - 1];
-
+  uint8_t tag;
   for (unsigned short int idx = 0; idx < constant_pool_count - 1; idx++) {
     file.read(reinterpret_cast<char*>(&tag), sizeof(tag));
     switch (tag) {
@@ -131,9 +110,48 @@ ClassFile ClassFileLoader::parse() {
         cpTable[idx].constant_name_and_type.descriptor_index =
             readBigEndian<uint16_t>(file);
         break;
+      case 15:
+        cpTable[idx].constant_method_handle.tag = tag;
+        file.read(reinterpret_cast<char*>(
+                      &cpTable[idx].constant_method_handle.reference_kind),
+                  sizeof(uint8_t));
+        cpTable[idx].constant_method_handle.reference_index =
+            readBigEndian<uint16_t>(file);
+        break;
+      case 16:
+        cpTable[idx].constant_method_type.tag = tag;
+        cpTable[idx].constant_method_type.descriptor_index =
+            readBigEndian<uint16_t>(file);
+        break;
     }
   }
+  return cpTable;
+}
+
+ClassFileLoader::ClassFileLoader(const string fileName) {
+  ClassFileLoader::fileName = fileName;
+}
+
+ClassFile ClassFileLoader::parse() {
+  ifstream file;
+  uint32_t magicNumber;
+  uint16_t minorVersion;
+  uint16_t majorVersion;
+  uint16_t constant_pool_count;
+  file.open(fileName, std::ios::binary);
+
+  if (!file) {
+    throw std::invalid_argument(
+        std::format("Error opening file: {}", fileName));
+  }
+
+  magicNumber = readBigEndian<uint32_t>(file);
+  minorVersion = readBigEndian<uint16_t>(file);
+  majorVersion = readBigEndian<uint16_t>(file);
+  constant_pool_count = readBigEndian<uint16_t>(file);
+  ConstantPoolTable cpTable = parseConstantPoolTable(constant_pool_count, file);
   std::vector<uint16_t> vec(1, 0);
+  file.close();
   return ClassFile(magicNumber, minorVersion, majorVersion, constant_pool_count,
                    cpTable, 0, 0, 0, 0, vec, 0, 0);
 }

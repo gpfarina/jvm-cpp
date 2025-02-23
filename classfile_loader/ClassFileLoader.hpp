@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <fstream>
 #include <string>
 
 #include "classfile/ClassFile.hpp"
