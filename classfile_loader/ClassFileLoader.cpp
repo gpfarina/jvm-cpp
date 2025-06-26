@@ -50,6 +50,7 @@ ConstantPoolTable parseConstantPoolTable(uint16_t constant_pool_count,
   uint8_t tag;
   for (unsigned short int idx = 0; idx < constant_pool_count - 1; idx++) {
     file.read(reinterpret_cast<char*>(&tag), sizeof(tag));
+    // tag 2 is not used
     switch (tag) {
       case 1:
         cpTable[idx].constant_utf8.tag = tag;
@@ -123,6 +124,26 @@ ConstantPoolTable parseConstantPoolTable(uint16_t constant_pool_count,
         cpTable[idx].constant_method_type.descriptor_index =
             readBigEndian<uint16_t>(file);
         break;
+      case 17:
+      case 18:
+        cpTable[idx].constant_dynamic.tag = tag;
+        cpTable[idx].constant_dynamic.bootstrap_method_attr_index =
+            readBigEndian<uint16_t>(file);
+        cpTable[idx].constant_dynamic.name_and_type_index =
+            readBigEndian<uint16_t>(file);
+        break;
+      case 19:
+        cpTable[idx].constant_module.tag = tag;
+        cpTable[idx].constant_module.name_index = readBigEndian<uint16_t>(file);
+        break;
+      case 20:
+        cpTable[idx].constant_package.tag = tag;
+        cpTable[idx].constant_package.name_index =
+            readBigEndian<uint16_t>(file);
+        break;
+      default:
+        throw std::invalid_argument(std::format("Unknown constant pool tag: {}",
+                                                static_cast<int>(tag)));
     }
   }
   return cpTable;

@@ -65,6 +65,22 @@ struct CONSTANT_MethodType_info {
   uint16_t descriptor_index;
 };
 
+struct CONSTANT_Dynamic_InvokeDynamic_info {
+  uint8_t tag;
+  uint16_t bootstrap_method_attr_index;
+  uint16_t name_and_type_index;
+};
+
+struct CONSTANT_Module_info {
+  uint8_t tag;
+  uint16_t name_index;
+};
+
+struct CONSTANT_Package_info {
+  uint8_t tag;
+  uint16_t name_index;
+};
+
 union CONSTANT_pool_entry {
   CONSTANT_Class_info constant_class;
   CONSTANT_FieldMethodIMethodref_info constant_field_method_interface_method;
@@ -77,6 +93,9 @@ union CONSTANT_pool_entry {
   CONSTANT_Utf8_info constant_utf8;
   CONSTANT_MethodHandle_info constant_method_handle;
   CONSTANT_MethodType_info constant_method_type;
+  CONSTANT_Dynamic_InvokeDynamic_info constant_dynamic;
+  CONSTANT_Module_info constant_module;
+  CONSTANT_Package_info constant_package;
 };
 
 typedef CONSTANT_pool_entry* ConstantPoolTable;
