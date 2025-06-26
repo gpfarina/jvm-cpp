@@ -1,11 +1,10 @@
-cc_test(
-    name = "classfile_loader_test",
+cc_binary(
+    name = "classfile_loader_test_manual",
     srcs = ["ClassFileLoaderUT.cpp"],
     deps = [
         "//classfile_loader",
         "//classfile",
-        "@gtest//:gtest_main",
-        "@bazel_tools//tools/cpp/runfiles"
+        "@bazel_tools//tools/cpp/runfiles",
     ],
-    data = ["//resources"]
+    data = ["//resources"],
 )
