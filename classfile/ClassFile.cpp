@@ -7,11 +7,25 @@ ClassFile::ClassFile(uint32_t magicNumber, uint16_t minorVersion,
                      ConstantPoolTable constantPool, uint16_t accessFlags,
                      uint16_t thisClass, uint16_t superClass,
                      uint16_t interfacesCount, std::vector<uint16_t> interfaces,
-                     uint16_t fieldsCount, uint16_t methodsCount) {
+                     uint16_t fieldsCount, FieldsInfo fields,
+                     uint16_t methodsCount, MethodsInfo methods,
+                     uint16_t attributesCount, AttributesInfo attributes) {
   this->setMagicNumber(magicNumber);
   this->setMinorVersion(minorVersion);
   this->setMajorVersion(majorVersion);
   this->setConstantPoolCount(constantPoolCount);
+  this->setConstantPool(constantPool);
+  this->setAccessFlags(accessFlags);
+  this->setThisClass(thisClass);
+  this->setSuperClass(superClass);
+  this->setInterfacesCount(interfacesCount);
+  this->setInterfaces(&interfaces);
+  this->setFieldsCount(fieldsCount);
+  this->setFields(fields);
+  this->setMethodsCount(methodsCount);
+  this->setMethods(methods);
+  this->setAttributesCount(attributesCount);
+  this->setAttributes(attributes);
 
   checkInvariants();
 }
@@ -65,8 +79,20 @@ void ClassFile::setFieldsCount(uint16_t fieldsCount) {
   this->fieldsCount = fieldsCount;
 }
 
+void ClassFile::setFields(FieldsInfo fields) { this->fields = fields; }
+
 void ClassFile::setMethodsCount(uint16_t methodsCount) {
   this->methodsCount = methodsCount;
+}
+
+void ClassFile::setMethods(MethodsInfo methods) { this->methods = methods; }
+
+void ClassFile::setAttributesCount(uint16_t attributesCount) {
+  this->attributesCount = attributesCount;
+}
+
+void ClassFile::setAttributes(AttributesInfo attributes) {
+  this->attributes = attributes;
 }
 
 uint32_t ClassFile::getMagicNumber() { return this->magicNumber; }

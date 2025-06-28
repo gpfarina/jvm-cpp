@@ -47,7 +47,6 @@ struct CONSTANT_NameAndType_info {
   uint16_t name_index;
   uint16_t descriptor_index;
 };
-
 struct CONSTANT_Utf8_info {
   uint8_t tag;
   uint16_t length;
@@ -98,14 +97,40 @@ union CONSTANT_pool_entry {
   CONSTANT_Package_info constant_package;
 };
 
+struct AttributeInfo {
+  uint16_t attribute_name_index;
+  uint32_t attribute_length;
+  uint8_t* info;
+};
+
+struct FieldInfo_entry {
+  uint16_t access_flags;
+  uint16_t name_index;
+  uint16_t descriptor_index;
+  uint16_t attributes_count;
+  AttributeInfo* attributes;  // Pointer to an array of AttributeInfo
+};
+struct MethodInfo {
+  uint16_t access_flags;
+  uint16_t name_index;
+  uint16_t descriptor_index;
+  uint16_t attributes_count;
+  AttributeInfo* attributes;  // Pointer to an array of AttributeInfo
+};
+
 typedef CONSTANT_pool_entry* ConstantPoolTable;
+typedef FieldInfo_entry* FieldsInfo;
+typedef MethodInfo* MethodsInfo;
+typedef AttributeInfo* AttributesInfo;
 class ClassFile {
  public:
   ClassFile(uint32_t magicNumber, uint16_t minorVersion, uint16_t majorVersion,
             uint16_t constantPoolCount, ConstantPoolTable constantPool,
             uint16_t accessFlags, uint16_t thisClass, uint16_t superClass,
             uint16_t interfacesCount, std::vector<uint16_t> interfaces,
-            uint16_t fieldsCount, uint16_t methodsCount);
+            uint16_t fieldsCount, FieldsInfo fields, uint16_t methodsCount,
+            MethodsInfo methods, uint16_t attributesCount,
+            AttributesInfo attributes);
   void setMagicNumber(uint32_t magicNumber);
   void setMinorVersion(uint16_t minorVersion);
   void setMajorVersion(uint16_t majorVersion);
@@ -117,7 +142,11 @@ class ClassFile {
   void setInterfacesCount(uint16_t interfacesCount);
   void setInterfaces(std::vector<uint16_t>* interfaces);
   void setFieldsCount(uint16_t fieldsCount);
+  void setFields(FieldsInfo fields);
   void setMethodsCount(uint16_t methodsCount);
+  void setMethods(MethodsInfo methods);
+  void setAttributesCount(uint16_t attributesCount);
+  void setAttributes(AttributesInfo attributes);
 
   uint32_t getMagicNumber();
   uint16_t getMinorVersion();
@@ -130,7 +159,11 @@ class ClassFile {
   uint16_t getInterfacesCount();
   std::vector<uint16_t> getInterfaces();
   u_int16_t getFieldsCount();
+  FieldsInfo getFields();
   u_int16_t getMethodsCount();
+  MethodsInfo getMethods();
+  uint16_t getAttributesCount();
+  AttributesInfo getAttributes();
 
  private:
   uint32_t magicNumber;
@@ -144,7 +177,11 @@ class ClassFile {
   uint16_t interfacesCount;
   std::vector<uint16_t> interfaces;
   uint16_t fieldsCount;
+  FieldsInfo fields;
   uint16_t methodsCount;
+  MethodsInfo methods;
+  uint16_t attributesCount;
+  AttributesInfo attributes;
 
   void checkInvariants();
 };
